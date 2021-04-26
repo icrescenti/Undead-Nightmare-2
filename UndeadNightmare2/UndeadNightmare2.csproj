@@ -48,7 +48,6 @@
     <Compile Include="Cinematics.cs" />
     <Compile Include="CustomFunctions.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Objects.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

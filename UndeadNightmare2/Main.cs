@@ -12,11 +12,30 @@ namespace UndeadNightmare2
 {
     public class Main : Script
     {
-        const int maxEnemies = 10;
+        //CHOLERA
+        //PRISIONER
+        //cassidy
+        //creepyoldlady
+        //gloria
+        //herbalist
+        //johnbaptising
+        //micahnemesis
+        //mysteruiousstranger
+        //odprostitute
+        //poorjoe
+        //priest_wedding
+        //sistercalderon
+        //soothsayer
+        //swampfreack
+        //tigerhandler
+        //vampire
+        //CS_MP_SETH
+        //RALLY MODS
+        //savageaftermath
+        //savagewarnin
+        //townwidnow
 
-        Brain[] undeadsBrains = new Brain[maxEnemies];
-        Ped[] undeads = new Ped[maxEnemies];
-
+        Ped[] undeads = new Ped[10];
         Blip[] mapBlips = new Blip[5];
 
         public Main()
@@ -32,9 +51,9 @@ namespace UndeadNightmare2
 
         private void OnTick(object sender, EventArgs e)
         {
-            #region death system
             if (isDeath())
             {
+                //RDR2.UI.Screen.
                 Player().IsInvincible = true;
                 Player().Task.ClearAllImmediately();
                 Player().Task.KnockOut(0, false);
@@ -47,44 +66,41 @@ namespace UndeadNightmare2
                 Player().IsInvincible = false;
                 Player().Health = 200;
             }
-            #endregion
 
-            for (int i = 0; i < maxEnemies; i++)
+            foreach (Ped ped in undeads)
             {
-                if (undeads[i].Exists() && undeads[i].IsAlive && !undeadsBrains[i].isAttacking)
+                if (ped.Exists() && ped.IsAlive && !ped.GetMeleeTarget().IsAlive)
                 {
-                    undeads[i].AlwaysKeepTask = true;
-                    //Ped target = getClosestPed(undeads[i]);
-                    Ped target = World.GetClosest<Ped>(undeads[i].Position, World.GetAllPeds());
-                    undeadsBrains[i].isAttacking = true;
-                    undeads[i].Task.Combat(target);
+                    ped.AlwaysKeepTask = true;
+                    Ped target = getClosestPed(ped);
+                    ped.Task.Combat(target);
                 }
             }
         }
-
-        #region stop script
+        
         private void OnAbort(object sender, EventArgs e)
         {
-            foreach (Ped undead in undeads)
+            foreach (Ped p in undeads)
             {
-                undead.Delete();
+                p.Delete();
             }
         }
-        #endregion
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.X)
             {
                 Init();
+                //Cinematics.cutscene("cutscene@FIN1_EXT", "1-HighHonor");
+                //Cinematics.cutscene("cutscene@FIN2_EXT_p18", "");
             }
             if (e.KeyCode == Keys.Z)
             {
                 RDR2.UI.Screen.ShowSubtitle(Player().Position.ToString());
-                /*foreach (Ped p in World.GetAllPeds())
+                foreach (Ped p in World.GetAllPeds())
                 {
                     p.Delete();
-                }*/
+                }
             }
         }
 
@@ -98,7 +114,6 @@ namespace UndeadNightmare2
             //Model sad = new Model("PLAYER_ZERO");
             //Game.Player.ChangeModel(sad);
             //Game.Player.Character.Outfit = 1;
-            //Function.Call(Hash.SET_PLAYER_MODEL, Player().Handle, new Model("PLAYER_ZERO").Hash);
 
             //Game.Player.Character.Position = new Vector3(795.5022f, 1777.418f, 281.448f);
 
@@ -111,13 +126,9 @@ namespace UndeadNightmare2
             Player().Health = 200;
 
             Function.Call(Hash.SET_WANTED_LEVEL_MULTIPLIER, 0);
+            //Function.Call(Hash.DOOR_SYSTEM_SET_DOOR_STATE, 0, 0);
 
-            Random r = new Random();
-            uint[] weathers = new uint[] { 0xBB898D2D, 0xCA71D7C, 0x995C7F44 };
-            Function.Call((Hash)0x59174F1AFE095B5A, weathers[r.Next(0,2)], false, true, true, 1F, false);
-
-            //generateEnemies();
-            //generateBlips();
+            generateEnemies();
         }
 
         #region Utils
@@ -129,7 +140,8 @@ namespace UndeadNightmare2
 
         void clearAllPeds()
         {
-            foreach (Ped ped in World.GetAllPeds())
+            Ped[] allPeds = World.GetAllPeds();
+            foreach (Ped ped in allPeds)
             {
                 if (ped.IsHuman)
                     ped.Delete();
@@ -156,9 +168,6 @@ namespace UndeadNightmare2
             {
                 undeads[i] = createped("A_M_M_ARMCHOLERACORPSE_01", "Undead", 250);
                 enemyPed(undeads[i]);
-                undeadsBrains[i] = new Brain();
-                undeadsBrains[i].isAttacking = false;
-                //undeads[i].target = getClosestPed(undeads[i].ped);
             }
         }
 
@@ -191,7 +200,7 @@ namespace UndeadNightmare2
         {
             Function.Call(Hash.SET_PED_FLEE_ATTRIBUTES, ped, 0, 0);
             Function.Call(Hash.SET_PED_COMBAT_ATTRIBUTES, ped, 46, true);
-            //(Crash)Function.Call(Hash.SET_PED_COMBAT_RANGE, ped, 9000.0f);
+            Function.Call(Hash.SET_PED_COMBAT_RANGE, ped, 9000.0f);
             Function.Call(Hash.SET_PED_SEEING_RANGE, ped, 9000.0f);
             Function.Call(Hash.SET_PED_VISUAL_FIELD_PERIPHERAL_RANGE, ped, 9000.0f);
             Function.Call(Hash.SET_PED_RELATIONSHIP_GROUP_HASH, ped, 1269650476);
@@ -244,34 +253,3 @@ namespace UndeadNightmare2
 
     }
 }
-
-
-//Cinematics.cutscene("cutscene@FIN1_EXT", "1-HighHonor");
-//Cinematics.cutscene("cutscene@FIN2_EXT_p18", "");
-
-//Function.Call(Hash.DOOR_SYSTEM_SET_DOOR_STATE, 0, 0);
-
-/*
-CHOLERA
-PRISIONER
-cassidy
-creepyoldlady
-gloria
-herbalist
-johnbaptising
-micahnemesis
-mysteruiousstranger
-odprostitute
-poorjoe
-priest_wedding
-sistercalderon
-soothsayer
-swampfreack
-tigerhandler
-vampire
-CS_MP_SETH
-RALLY MODS
-savageaftermath
-savagewarnin
-townwidnow
-*/
